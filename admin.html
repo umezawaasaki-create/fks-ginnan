@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#231F20">
+<title>やきとり 管理</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&amp;display=swap&amp;text=%21%22%24%25%26%27%28%29%2A%2B%2C-./0123456789%3A%3B%3C%3D%3E%3FABCDEFGHIJKLMNOPRSTUVXY%5B%5D_%60abcdefghijklmnopqrstuvwxyz%7B%7C%7D%E2%80%A6%E2%86%92%E3%80%81%E3%80%82%E3%81%82%E3%81%84%E3%81%8A%E3%81%8B%E3%81%8D%E3%81%8F%E3%81%91%E3%81%93%E3%81%95%E3%81%97%E3%81%99%E3%81%9B%E3%81%9F%E3%81%A0%E3%81%A1%E3%81%A4%E3%81%A6%E3%81%A7%E3%81%A8%E3%81%A9%E3%81%AB%E3%81%AE%E3%81%AF%E3%81%B3%E3%81%B8%E3%81%B9%E3%81%BE%E3%81%BF%E3%82%81%E3%82%82%E3%82%84%E3%82%88%E3%82%89%E3%82%8A%E3%82%8B%E3%82%8D%E3%82%8F%E3%82%92%E3%82%93%E3%82%A2%E3%82%A4%E3%82%A6%E3%82%B6%E3%82%BB%E3%82%BF%E3%83%83%E3%83%87%E3%83%88%E3%83%96%E3%83%A0%E3%83%A9%E3%83%AA%E3%83%AB%E3%83%AC%E3%83%BB%E3%83%BC%E4%B8%8A%E4%B8%AD%E4%BB%B6%E4%BF%A1%E5%86%85%E5%86%86%E5%89%8A%E5%8F%B7%E5%90%88%E5%90%8C%E5%A3%B2%E5%A4%B1%E5%A7%8B%E5%AE%9A%E5%BE%85%E6%8E%A5%E6%95%97%E6%95%B0%E6%96%87%E6%96%B0%E6%9B%B4%E6%9C%9F%E6%9C%AA%E6%9C%AC%E6%B3%A8%E7%90%86%E7%94%BB%E7%95%AA%E7%9B%B4%E7%A2%BA%E7%AE%A1%E7%B6%9A%E8%A8%88%E8%A8%AD%E8%AA%8D%E8%AA%AD%E8%BE%BC%E9%80%9A%E9%99%A4%E9%9D%A2%EF%BC%88%EF%BC%89%EF%BC%9F" media="print" onload="this.media='all'">
+<style>:root{--bg:#231F20;--panel:#2E292A;--line:#4A4344;--ink:#FFFFFF;--sub:#C9BFB9;--dark:#231F20;--orange:#E07A35;--orange-d:#B85E22;--yellow:#F7E733;--red:#D0503B;--tare:#7A3B12;--tare-l:#F6E3D2;--shio:#2F6E8E;--shio-l:#E3EFF5;--ok:#4CAF7A;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#231F20;--panel:#2E292A;--line:#4A4344;--ink:#FFFFFF;--sub:#C9BFB9;}}:root[data-theme="dark"]{--bg:#231F20;--panel:#2E292A;--line:#4A4344;--ink:#FFFFFF;--sub:#C9BFB9;}*{box-sizing:border-box}html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Hiragino Sans","Yu Gothic",sans-serif;-webkit-tap-highlight-color:transparent;overflow-x:hidden;}button{font-family:inherit;cursor:pointer;touch-action:manipulation}button:focus-visible{outline:5px solid var(--yellow);outline-offset:4px}.mode{display:none}.mode.on{display:block}.screen{display:none}.screen.on{display:block}.adm{max-width:1200px;margin:0 auto;padding:14px 16px 40px}.adm-head{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:10px 0 12px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-bottom:3px solid var(--orange)}body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}.adm-head h1{margin:0;font-size:30px;font-weight:900;color:var(--dark);-webkit-text-stroke:.14em #fff;paint-order:stroke fill;background:var(--orange);padding:4px 18px 6px;border-radius:999px}.live{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--sub);font-size:16px}.live i{width:12px;height:12px;border-radius:50%;background:var(--line)}.live.on i{background:var(--ok);box-shadow:0 0 0 4px rgba(76,175,122,.25)}.adm-head .sp{flex:1}.tbtn{background:var(--panel);color:#fff;border:2px solid var(--line);border-radius:999px;padding:10px 18px;font-size:16px;font-weight:700}.tbtn.warn{border-color:var(--red);color:#FFB3A6}.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:14px 0}@media (max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}.stat{background:var(--panel);border-radius:18px;padding:12px 14px}.stat span{display:block;font-size:15px;color:var(--sub);font-weight:700}.stat b{font-size:34px;font-weight:900}.stat b small{font-size:.5em;margin-left:2px}.stat.hl{background:var(--orange);color:var(--dark)}.stat.hl span{color:var(--dark)}.stat.t b{color:#F0A56E}.stat.s b{color:#8FCBE8}.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}@media (max-width:900px){.cols{grid-template-columns:1fr}}.col h2{margin:0 0 10px;font-size:22px;font-weight:900;display:flex;align-items:center;gap:10px}.col h2 em{font-style:normal;background:#fff;color:var(--dark);border-radius:999px;padding:0 12px;font-size:18px}.col.new h2{color:var(--yellow)}.col.ready h2{color:var(--orange)}.col.handed h2{color:var(--sub)}.list{display:flex;flex-direction:column;gap:10px}.empty{color:var(--sub);background:var(--panel);border-radius:16px;padding:18px;text-align:center;font-size:16px}.ord{background:#fff;color:var(--dark);border-radius:20px;padding:12px 14px;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:center}.ord.fresh{animation:flash 1.6s ease-out}@keyframes flash{0%{box-shadow:0 0 0 0 var(--yellow)}30%{box-shadow:0 0 0 8px var(--yellow)}100%{box-shadow:0 0 0 0 transparent}}.ord .n{grid-row:span 2;font-size:44px;font-weight:900;line-height:1;background:var(--orange);border-radius:14px;padding:6px 12px;min-width:2.1em;text-align:center}.ord .q{font-size:22px;font-weight:900;display:flex;gap:14px;flex-wrap:wrap}.ord .q .t{color:var(--tare)}.ord .q .s{color:var(--shio)}.ord .m{font-size:15px;color:#6E625C;font-weight:700}.ord .acts{grid-column:1/-1;display:flex;gap:8px;margin-top:6px}.ord .acts button{flex:1;border-radius:12px;padding:12px 8px;font-size:18px;font-weight:900;border:none}.ord .go{background:var(--dark);color:#fff}.ord .back{flex:0 0 auto !important;background:#EDE6E1;color:var(--dark)}.col.handed .ord{opacity:.7}.note{color:var(--sub);font-size:14px;margin-top:18px}@media (prefers-reduced-motion:reduce){.pop,.ord.fresh{animation:none}}</style>
+</head>
+<body>
+<!-- ===================== ADMIN ===================== -->
+<div class="mode on" id="m-admin">
+  <div class="adm">
+    <div class="adm-head">
+      <h1>やきとり 管理</h1>
+      <span class="live" id="live"><i></i><span id="live-t">接続中…</span></span>
+      <span class="sp"></span>
+      <button class="tbtn" id="go-order">注文画面へ</button>
+      <button class="tbtn warn" id="b-reset">データをリセット</button>
+    </div>
+    <div class="stats">
+      <div class="stat hl"><span>つくる待ち</span><b id="st-wait">0<small>件</small></b></div>
+      <div class="stat t"><span>タレ 合計</span><b id="st-tare">0<small>本</small></b></div>
+      <div class="stat s"><span>しお 合計</span><b id="st-shio">0<small>本</small></b></div>
+      <div class="stat"><span>注文数</span><b id="st-cnt">0<small>件</small></b></div>
+      <div class="stat"><span>売上</span><b id="st-sales">0<small>円</small></b></div>
+    </div>
+    <div class="cols">
+      <div class="col new"><h2>つくる <em id="c-new">0</em></h2><div class="list" id="l-new"></div></div>
+      <div class="col ready"><h2>できた・よびだし <em id="c-ready">0</em></h2><div class="list" id="l-ready"></div></div>
+      <div class="col handed"><h2>わたした <em id="c-handed">0</em></h2><div class="list" id="l-handed"></div></div>
+    </div>
+    <p class="note" id="adm-note"></p>
+  </div>
+</div>
+<script>const FIREBASE = {
+apiKey: "AIzaSyDCxuCtMP3w649vIBKALgcGsE0Vo43hG_4",
+projectId: "fks-ginnan"
+};
+const MAX = 10;
+const $ = id => document.getElementById(id);
+const price = n => Math.floor(n/2)*150 + (n%2)*100;
+const USE_FB = !!(FIREBASE.apiKey && FIREBASE.projectId);
+const Store = (() => {
+const K = "ginnan-orders", NK = "ginnan-no";
+let orders = [], fns = [], fb = null;
+const emit = () => fns.forEach(f => f(orders));
+const lsGet = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch(e){ return d; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} };
+const loadLocal = () => { orders = lsGet(K, []).sort((a,b) => b.createdAt - a.createdAt); emit(); };
+const DOCS = () => `projects/${FIREBASE.projectId}/databases/(default)/documents`;
+const API = p => `https://firestore.googleapis.com/v1/${p}?key=${FIREBASE.apiKey}`;
+async function post(path, body){
+const r = await fetch(API(path), { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify(body) });
+if (!r.ok) throw new Error("HTTP " + r.status);
+return r.json();
+}
+const toFields = o => Object.fromEntries(Object.entries(o).map(([k,v]) =>
+[k, typeof v === "number" ? { integerValue: String(v) } : { stringValue: String(v) }]));
+async function nextNo(){
+if (!USE_FB){ const n = lsGet(NK, 0) + 1; lsSet(NK, n); return n; }
+const res = await post(DOCS() + ":commit", { writes: [{ transform: {
+document: DOCS() + "/meta/counter",
+fieldTransforms: [{ fieldPath: "n", increment: { integerValue: "1" } }] } }] });
+return Number(res.writeResults[0].transformResults[0].integerValue);
+}
+async function add(o){
+if (!USE_FB){ const l = lsGet(K, []); l.push({ id:"l"+Date.now()+Math.random().toString(36).slice(2,6), ...o }); lsSet(K, l); loadLocal(); return; }
+await post(DOCS() + "/orders", { fields: toFields(o) });
+}
+async function init(status){
+if (!USE_FB){
+loadLocal();
+addEventListener("storage", e => { if (e.key === K) loadLocal(); });
+status(true, "このブラウザ内だけで同期中（Firebase未設定）");
+return;
+}
+const V = "10.12.2";
+const [{ initializeApp }, F] = await Promise.all([
+import(`https://www.gstatic.com/firebasejs/${V}/firebase-app.js`),
+import(`https://www.gstatic.com/firebasejs/${V}/firebase-firestore.js`)
+]);
+const db = F.getFirestore(initializeApp({ apiKey: FIREBASE.apiKey, projectId: FIREBASE.projectId }));
+fb = { F, db };
+F.onSnapshot(F.query(F.collection(db, "orders"), F.orderBy("createdAt","desc"), F.limit(1000)), snap => {
+orders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+status(true, "リアルタイム更新中"); emit();
+}, () => status(false, "接続できません。設定とルールを確認してください"));
+}
+async function setStatus(id, st){
+const patch = { status: st, updatedAt: Date.now() };
+if (!fb){ const l = lsGet(K, []); const o = l.find(x => x.id === id); if (o) Object.assign(o, patch); lsSet(K, l); loadLocal(); return; }
+await fb.F.updateDoc(fb.F.doc(fb.db, "orders", id), patch);
+}
+async function reset(){
+if (!fb){ lsSet(K, []); lsSet(NK, 0); loadLocal(); return; }
+const { F, db } = fb; const ids = orders.map(o => o.id);
+for (let i = 0; i < ids.length; i += 400){
+const b = F.writeBatch(db); ids.slice(i, i+400).forEach(id => b.delete(F.doc(db, "orders", id))); await b.commit();
+}
+await F.setDoc(F.doc(db, "meta", "counter"), { n: 0 });
+}
+return { init, nextNo, add, setStatus, reset, onOrders: f => { fns.push(f); f(orders); } };
+})();
+const seen = new Set(); let firstLoad = true;
+const hhmm = t => { const d = new Date(t); return d.getHours() + ":" + String(d.getMinutes()).padStart(2,"0"); };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function card(o){
+const fresh = !firstLoad && !seen.has(o.id) ? " fresh" : "";
+const q = (o.tare ? `<span class="t">タレ ${o.tare}本</span>` : "") + (o.shio ? `<span class="s">しお ${o.shio}本</span>` : "");
+const id = esc(o.id); let a;
+if (o.status === "new") a = `<button class="go" data-id="${id}" data-s="ready">やけた → よびだし</button>`;
+else if (o.status === "ready") a = `<button class="back" data-id="${id}" data-s="new">もどす</button><button class="go" data-id="${id}" data-s="handed">わたした</button>`;
+else a = `<button class="back" data-id="${id}" data-s="ready">もどす</button>`;
+return `<div class="ord${fresh}"><div class="n">${esc(o.no)}</div><div class="q">${q}</div><div class="m">${esc(o.price)}円 ・ ${hhmm(o.createdAt)}</div><div class="acts">${a}</div></div>`;
+}
+const EMPTY = { new:"新しい注文はまだありません", ready:"できた注文はありません", handed:"まだありません" };
+function renderAdmin(list){
+const by = { new:[], ready:[], handed:[] };
+list.forEach(o => (by[o.status] || by.new).push(o));
+by.new.sort((a,b) => a.createdAt - b.createdAt); by.ready.sort((a,b) => a.createdAt - b.createdAt);
+by.handed.sort((a,b) => (b.updatedAt||0) - (a.updatedAt||0));
+for (const k in by){ $("l-"+k).innerHTML = by[k].length ? by[k].map(card).join("") : `<div class="empty">${EMPTY[k]}</div>`; $("c-"+k).textContent = by[k].length; }
+const sum = f => list.reduce((a,o) => a + (o[f]||0), 0);
+$("st-wait").innerHTML = by.new.length + "<small>件</small>";
+$("st-tare").innerHTML = sum("tare") + "<small>本</small>";
+$("st-shio").innerHTML = sum("shio") + "<small>本</small>";
+$("st-cnt").innerHTML = list.length + "<small>件</small>";
+$("st-sales").innerHTML = sum("price").toLocaleString() + "<small>円</small>";
+list.forEach(o => seen.add(o.id));
+}
+document.querySelector(".cols").addEventListener("click", async e => {
+const b = e.target.closest("button[data-id]"); if (!b) return; b.disabled = true;
+try { await Store.setStatus(b.dataset.id, b.dataset.s); } catch(err){ $("adm-note").textContent = "更新できませんでした。"; b.disabled = false; }
+});
+$("b-reset").onclick = async () => {
+if (!confirm("すべての注文を削除し、番号を1から始め直します。よろしいですか？")) return;
+$("b-reset").disabled = true;
+try { await Store.reset(); $("adm-note").textContent = "リセットしました。"; } catch(e){ $("adm-note").textContent = "リセットできませんでした。"; }
+$("b-reset").disabled = false;
+};
+$("go-order").onclick = () => { location.href = "index.html"; };
+const live = (on, t) => { $("live").classList.toggle("on", on); $("live-t").textContent = t; };
+live(false, "接続中…");
+Store.onOrders(list => { renderAdmin(list); if (list.length) firstLoad = false; });
+Store.init((on, t) => { live(on, t); setTimeout(() => { firstLoad = false; }, 0); }).catch(() => live(false, "読み込みに失敗しました。通信を確認してください"));</script>
+</body>
+</html>
