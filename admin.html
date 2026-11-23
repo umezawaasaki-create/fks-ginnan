@@ -60,7 +60,7 @@
 apiKey: "AIzaSyDCxuCtMP3w649vIBKALgcGsE0Vo43hG_4",
 projectId: "fks-ginnan"
 };
-const TAGS = 30;
+const TAGS = 20;
 const MAX = 10;
 const tag = no => (no - 1) % TAGS + 1;  /* 通し番号 → 受付札の番号 */
 const tagOf = o => o.tag ?? tag(o.no);  /* 札を変えた注文は、変えたあとの番号 */
@@ -252,7 +252,7 @@ const cur = tagOf(o);
 const v = prompt(`札${cur}番の注文（${[o.tare ? `タレ${o.tare}本` : "", o.shio ? `しお${o.shio}本` : ""].filter(Boolean).join("・")}、${hhmm(o.createdAt)}）\n新しく渡した札の番号を入力してください`, "");
 if (v === null || !String(v).trim()) return;
 const n = Number(String(v).replace(/[\s番]/g, "").replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)));
-if (!Number.isInteger(n) || n < 1 || n > 999){ $("adm-note").textContent = "札の番号は 1 以上の数字で入力してください。"; return; }
+if (!Number.isInteger(n) || n < 1 || n > TAGS){ $("adm-note").textContent = `札の番号は 1〜${TAGS} の数字で入力してください。`; return; }
 if (n === cur) return;
 const dup = lastList.find(x => x.id !== id && x.status !== "handed" && tagOf(x) === n);
 if (dup && !confirm(`札${n}番は、よびだし待ちの別の注文（${hhmm(dup.createdAt)}）でも使われています。\nそれでも変えますか？`)) return;
