@@ -197,6 +197,11 @@ const patch = { tag: n, updatedAt: Date.now() };
 if (!fb){ const l = lsGet(K, []); const o = l.find(x => x.id === id); if (o) Object.assign(o, patch); lsSet(K, l); loadLocal(); return; }
 await fb.F.updateDoc(fb.F.doc(fb.db, "orders", id), patch);
 }
+async function setItems(id, tare, shio){
+const patch = { tare, shio, count: tare + shio, price: price(tare + shio), updatedAt: Date.now() };
+if (!fb){ const l = lsGet(K, []); const o = l.find(x => x.id === id); if (o) Object.assign(o, patch); lsSet(K, l); loadLocal(); return; }
+await fb.F.updateDoc(fb.F.doc(fb.db, "orders", id), patch);
+}
 async function reset(){
 if (!fb){ lsSet(K, []); lsSet(NK, 0); loadLocal(); return; }
 const { F, db } = fb; const ids = orders.map(o => o.id);
@@ -218,7 +223,7 @@ const b = F.writeBatch(db); list.slice(i, i+400).forEach(({ id, ...o }) => b.set
 const c = await F.getDoc(F.doc(db, "meta", "counter"));
 if (maxNo > (c.exists() ? c.data().n : 0)) await F.setDoc(F.doc(db, "meta", "counter"), { n: maxNo });
 }
-return { init, nextNo, add, setStatus, setTag, reset, restore, backup, orderState, watchOrder, setOrder, onOrder, onOrders: f => { fns.push(f); f(orders); } };
+return { init, nextNo, add, setStatus, setTag, setItems, reset, restore, backup, orderState, watchOrder, setOrder, onOrder, onOrders: f => { fns.push(f); f(orders); } };
 })();
 const st = { tare:0, shio:0 };
 let remainNow = null;  /* 残り本数（仕入れ本数が未設定なら null＝制限なし） */
