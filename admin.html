@@ -204,7 +204,7 @@ if (maxNo > (c.exists() ? c.data().n : 0)) await F.setDoc(F.doc(db, "meta", "cou
 return { init, nextNo, add, setStatus, setTag, setItems, reset, restore, backup, orderState, watchOrder, setOrder, onOrder, onOrders: f => { fns.push(f); f(orders); } };
 })();
 const seen = new Set(); let firstLoad = true;
-let ost = { open: true, stock: null, remain: null, busy: [] }, soldNow = 0, wroteRemain = null, wroteBusy = null, autoStopping = false, loaded = false;
+let ost = { open: true, stock: null, remain: null, busy: [] }, soldNow = 0, wroteRemain = null, autoStopping = false, loaded = false;
 const hhmm = t => { const d = new Date(t); return d.getHours() + ":" + String(d.getMinutes()).padStart(2,"0"); };
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function card(o){
@@ -413,7 +413,6 @@ $("sk-sold").innerHTML = big(soldNow);
 $("sk-sold-sub").textContent = `タレ ${add("tare").toLocaleString()}・しお ${add("shio").toLocaleString()}`;
 const hourAgo = Date.now() - 3600000, pace = list.reduce((a, o) => a + (o.createdAt > hourAgo ? (o.count || 0) : 0), 0);
 let paceText = `直近1時間で ${pace.toLocaleString()}本`;
-writeBusy();
 if (s == null){
 $("sk-stock").textContent = "未設定"; $("sk-remain").textContent = "—"; $("sk-bar").style.width = "0";
 $("sk-pct").textContent = "仕入れ本数を設定すると、残りと売れた割合が出ます"; $("sk-pace").textContent = paceText;
@@ -435,12 +434,6 @@ if (remain <= 0 && ost.open && !autoStopping){
 autoStopping = true;
 Store.setOrder({ open: false }).then(() => { $("adm-note").textContent = "売り切れたので、自動でオーダーストップにしました。"; }).catch(() => {}).finally(() => { autoStopping = false; });
 }
-}
-function writeBusy(){
-if (!loaded) return;
-const busy = [...new Set(lastList.filter(o => o.status !== "handed").map(tagOf))].sort((a, b) => a - b), k = busy.join(",");
-if (k === (ost.busy || []).join(",") || k === wroteBusy) return;
-wroteBusy = k; Store.setOrder({ busy }).catch(() => { wroteBusy = null; });
 }
 setInterval(renderStock, 60000);  /* 「直近1時間」を時間の経過に合わせて更新 */
 const skMsg = t => { $("sk-msg").textContent = t; $("sk-msg").hidden = !t; };
